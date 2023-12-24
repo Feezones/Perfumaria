@@ -56,3 +56,4 @@ C:\Users\felip\source\repos\Perfumaria\Perfumaria\bin\Debug\net6.0\runtimes\win\
 C:\Users\felip\source\repos\Perfumaria\Perfumaria\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
 C:\Users\felip\source\repos\Perfumaria\Perfumaria\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
 C:\Users\felip\source\repos\Perfumaria\Perfumaria\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
+C:\Users\felip\source\repos\Perfumaria\Perfumaria\obj\Debug\net6.0\Perfumaria.sourcelink.json

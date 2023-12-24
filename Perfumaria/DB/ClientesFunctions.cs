@@ -14,8 +14,6 @@ namespace Perfumaria.DB
         List<Clientes> clienteById = new List<Clientes>();
         public List<Clientes> GetClient()
         {
-            
-
             try
             {
                 conn.Open();
@@ -24,8 +22,6 @@ namespace Perfumaria.DB
 
                 MySqlCommand comando = new MySqlCommand(query, conn);
                 MySqlDataReader leitor = comando.ExecuteReader();
-
-
 
                 while (leitor.Read())
                 {
@@ -42,18 +38,13 @@ namespace Perfumaria.DB
                     listaClientes.Add(cliente);
                 }
                 leitor.Close();
+                conn.Close();
                 return listaClientes;
             }
             catch (MySqlException ex)
             {
-                Console.WriteLine("Erro ao executar o comando SQL: " + ex.Message);
-                return listaClientes;
+                throw new ArgumentException("Erro ao executar o comando SQL: " + ex.Message);
             }
-            finally
-            {
-                conn.Close();
-            }
-
         }
 
         public List<Clientes> GetClientById(int id)
