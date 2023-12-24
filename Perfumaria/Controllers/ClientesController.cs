@@ -29,23 +29,61 @@ namespace Perfumaria.Controllers
 
         // GET api/<ClientesController>/5
         [HttpGet("{id}")]
-        public List<Clientes> Get(int id)
+        public ActionResult Get(int id)
         {
-            var cliente = new ClientesFunctions();
-            var clientes = cliente.GetClientById(id);
-            return clientes;
+            try
+            {
+                var cliente = new ClientesFunctions();
+                var clientes = cliente.GetClientById(id);
+                if(clientes.Count > 0)
+                {
+                    return StatusCode(200, new { sucess = "Sucesso ao realizar consulta", clientes });
+                }
+                return StatusCode(404, new { msg = "Não encontrado" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "Erro de banco de dados", message = ex.Message });
+            }
         }
 
         // POST api/<ClientesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult Post(Clientes clientes)
         {
+            try
+            {
+                var cliente = new ClientesFunctions();
+                var clientesDb = cliente.SaveClient(clientes);
+
+                if (clientesDb == true)
+                {
+                    return StatusCode(200, new { sucess = "Sucesso ao realizar consulta", clientesDb });
+                }
+
+                return StatusCode(500, new { msg = "Erro desconhecido" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "Erro de banco de dados", message = ex.Message });
+            }
         }
 
         // PUT api/<ClientesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult Put(int id,Clientes clientes)
         {
+            try
+            {
+                var cliente = new ClientesFunctions();
+                var clientesDb = cliente.EditClient(id,clientes);
+
+                return StatusCode(200, new { sucess = "Sucesso ao alterar dados", clientesDb });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "Erro de banco de dados", message = ex.Message });
+            }
         }
 
         // DELETE api/<ClientesController>/5
