@@ -3,8 +3,8 @@
     public class Perfumes
     {
         public int id {  get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
+        public string nome { get; set; }
+        public string descricao { get; set; }
         public float valor { get; set; }
         public int quantidade { get; set; }
     }

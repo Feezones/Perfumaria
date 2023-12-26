@@ -1,46 +1,40 @@
 ﻿using MySql.Data.MySqlClient;
-using MySql.Data.MySqlClient.Memcached;
 using Perfumaria.Models;
-using System.Numerics;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Perfumaria.DB
 {
-    public class ClientesFunctions
+    public class PerfumesFunctions
     {
         private MySqlConnection conn = new MySqlConnection("Server=localhost;Database=Perfumaria;Uid=root;Pwd=admin;");
-        
-        List<Clientes> listaClientes = new List<Clientes>();
 
-        List<Clientes> clienteById = new List<Clientes>();
-        public List<Clientes> GetClient()
+        List<Perfumes> listaPerfumes = new List<Perfumes>();
+        public List<Perfumes> GetPerfumes()
         {
             try
             {
                 conn.Open();
 
-                string query = "SELECT * FROM Clientes";
+                string query = "SELECT * FROM Produtos";
 
                 MySqlCommand comando = new MySqlCommand(query, conn);
                 MySqlDataReader leitor = comando.ExecuteReader();
 
                 while (leitor.Read())
                 {
-                    Clientes cliente = new Clientes
+                    Perfumes perfumes = new Perfumes
                     {
                         id = Convert.ToInt32(leitor["id"]),
                         nome = leitor["name"].ToString(),
-                        sobrenome = leitor["sobrenome"].ToString(),
-                        email = leitor["email"].ToString(),
-                        cpf = leitor["cpf"].ToString(),
-                        endereco = leitor["endereco"].ToString()
+                        descricao = leitor["description"].ToString(),
+                        valor = Convert.ToByte(leitor["valor"]),
+                        quantidade = Convert.ToInt32(leitor["quantidade"])
                     };
 
-                    listaClientes.Add(cliente);
+                    listaPerfumes.Add(perfumes);
                 }
                 leitor.Close();
                 conn.Close();
-                return listaClientes;
+                return listaPerfumes;
             }
             catch (MySqlException ex)
             {
@@ -48,31 +42,30 @@ namespace Perfumaria.DB
             }
         }
 
-        public List<Clientes> GetClientById(int id)
+        public List<Perfumes> GetPerfumesById(int id)
         {
             try
             {
                 conn.Open();
 
-                string query = $"select * from Clientes where id={id}";
+                string query = $"select * from Produtos where id={id}";
                 MySqlCommand comando = new MySqlCommand(query, conn);
                 MySqlDataReader leitor = comando.ExecuteReader();
 
                 if (leitor.Read())
                 {
-                    Clientes cliente = new Clientes
+                    Perfumes perfumes = new Perfumes
                     {
                         id = Convert.ToInt32(leitor["id"]),
                         nome = leitor["name"].ToString(),
-                        sobrenome = leitor["sobrenome"].ToString(),
-                        email = leitor["email"].ToString(),
-                        cpf = leitor["cpf"].ToString(),
-                        endereco = leitor["endereco"].ToString()
+                        descricao = leitor["description"].ToString(),
+                        valor = Convert.ToByte(leitor["valor"]),
+                        quantidade = Convert.ToInt32(leitor["quantidade"])
                     };
-                    clienteById.Add(cliente);
+                    listaPerfumes.Add(perfumes);
                 }
                 leitor.Close();
-                return clienteById;
+                return listaPerfumes;
             }
             catch (MySqlException ex)
             {
@@ -84,15 +77,15 @@ namespace Perfumaria.DB
             }
         }
 
-        public bool SaveClient(Clientes cliente)
+        public bool SavePerfumes(Perfumes perfumes)
         {
 
             try
             {
                 conn.Open();
 
-                var query = $"insert into Clientes (name,sobrenome,email,cpf,endereco) " +
-                            $"values ('{cliente.nome}','{cliente.sobrenome}','{cliente.email}','{cliente.cpf}','{cliente.endereco}')";
+                var query = "insert into Produtos (name, description, valor, quantidade) " +
+                            $"values ('{perfumes.nome}','{perfumes.descricao}',{perfumes.valor},{perfumes.quantidade})";
 
                 MySqlCommand command = new MySqlCommand(query, conn);
 
@@ -106,36 +99,35 @@ namespace Perfumaria.DB
             }
         }
 
-        public List<Clientes> EditClient(int id,Clientes cliente)
+        public List<Perfumes> EditPerfume(int id, Perfumes perfumes)
         {
             try
             {
                 conn.Open();
 
-                var query = $"update Clientes set " +
-                    $"name ='{cliente.nome}', sobrenome = '{cliente.sobrenome}', email='{cliente.email}', cpf='{cliente.cpf}', endereco='{cliente.endereco}'" +
+                var query = $"update Produtos set " +
+                    $"name ='{perfumes.nome}', description = '{perfumes.descricao}', valor='{perfumes.valor}', quantidade='{perfumes.quantidade}'" +
                     $"where id = {id}";
                 MySqlCommand command = new MySqlCommand(query, conn);
 
-                var query2 = $"select * from Clientes where id={id}";
+                var query2 = $"select * from Produtos where id={id}";
                 MySqlCommand command2 = new MySqlCommand(query2, conn);
                 MySqlDataReader leitor = command2.ExecuteReader();
 
                 if (leitor.Read())
                 {
-                    Clientes clientes = new Clientes
+                    Perfumes perfume = new Perfumes
                     {
                         id = Convert.ToInt32(leitor["id"]),
                         nome = leitor["name"].ToString(),
-                        sobrenome = leitor["sobrenome"].ToString(),
-                        email = leitor["email"].ToString(),
-                        cpf = leitor["cpf"].ToString(),
-                        endereco = leitor["endereco"].ToString()
+                        descricao = leitor["description"].ToString(),
+                        valor = Convert.ToByte(leitor["valor"]),
+                        quantidade = Convert.ToInt32(leitor["quantidade"])
                     };
-                    clienteById.Add(clientes);
+                    listaPerfumes.Add(perfume);
                 }
                 leitor.Close();
-                return clienteById;
+                return listaPerfumes;
             }
             catch (MySqlException ex)
             {
@@ -143,13 +135,13 @@ namespace Perfumaria.DB
             }
         }
 
-        public bool DeleteClient(int id)
+        public bool DeletePerfume(int id)
         {
             try
             {
                 conn.Open();
 
-                var query = $"delete from Clientes where id = {id}";
+                var query = $"delete from Produtos where id = {id}";
 
                 MySqlCommand command = new MySqlCommand(query, conn);
 
@@ -157,7 +149,7 @@ namespace Perfumaria.DB
 
                 return linhasAfetadas > 0;
             }
-            catch(MySqlException ex)
+            catch (MySqlException ex)
             {
                 throw new ArgumentException("Erro ao executar o comando SQL: " + ex.Message);
             }
