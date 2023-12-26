@@ -26,8 +26,8 @@ namespace Perfumaria.DB
                         id = Convert.ToInt32(leitor["id"]),
                         nome = leitor["name"].ToString(),
                         descricao = leitor["description"].ToString(),
-                        valor = Convert.ToByte(leitor["valor"]),
-                        quantidade = Convert.ToInt32(leitor["quantidade"])
+                        valor = Convert.ToDecimal(leitor["valor"]),
+                        quantidade = Convert.ToInt32(leitor["quantidade"]),
                     };
 
                     listaPerfumes.Add(perfumes);
@@ -49,6 +49,7 @@ namespace Perfumaria.DB
                 conn.Open();
 
                 string query = $"select * from Produtos where id={id}";
+
                 MySqlCommand comando = new MySqlCommand(query, conn);
                 MySqlDataReader leitor = comando.ExecuteReader();
 
@@ -59,7 +60,7 @@ namespace Perfumaria.DB
                         id = Convert.ToInt32(leitor["id"]),
                         nome = leitor["name"].ToString(),
                         descricao = leitor["description"].ToString(),
-                        valor = Convert.ToByte(leitor["valor"]),
+                        valor = Convert.ToDecimal(leitor["valor"]),
                         quantidade = Convert.ToInt32(leitor["quantidade"])
                     };
                     listaPerfumes.Add(perfumes);
@@ -79,13 +80,18 @@ namespace Perfumaria.DB
 
         public bool SavePerfumes(Perfumes perfumes)
         {
-
+            
             try
             {
                 conn.Open();
 
-                var query = "insert into Produtos (name, description, valor, quantidade) " +
-                            $"values ('{perfumes.nome}','{perfumes.descricao}',{perfumes.valor},{perfumes.quantidade})";
+                string query = "insert into Produtos (name, description, quantidade, valor) " +
+                            $"values ('{perfumes.nome}','{perfumes.descricao}',{perfumes.quantidade},";
+
+                string valor = (perfumes.valor).ToString();
+                valor = valor.Replace(',','.');
+
+                query = query + $"'{valor}')";
 
                 MySqlCommand command = new MySqlCommand(query, conn);
 
@@ -105,10 +111,15 @@ namespace Perfumaria.DB
             {
                 conn.Open();
 
+                string valor = (perfumes.valor).ToString();
+                valor = valor.Replace(',', '.');
+
                 var query = $"update Produtos set " +
-                    $"name ='{perfumes.nome}', description = '{perfumes.descricao}', valor='{perfumes.valor}', quantidade='{perfumes.quantidade}'" +
+                    $"name ='{perfumes.nome}', description = '{perfumes.descricao}', valor='{valor}', quantidade='{perfumes.quantidade}'" +
                     $"where id = {id}";
+
                 MySqlCommand command = new MySqlCommand(query, conn);
+                command.ExecuteNonQuery();
 
                 var query2 = $"select * from Produtos where id={id}";
                 MySqlCommand command2 = new MySqlCommand(query2, conn);
@@ -121,7 +132,7 @@ namespace Perfumaria.DB
                         id = Convert.ToInt32(leitor["id"]),
                         nome = leitor["name"].ToString(),
                         descricao = leitor["description"].ToString(),
-                        valor = Convert.ToByte(leitor["valor"]),
+                        valor = Convert.ToDecimal(leitor["valor"]),
                         quantidade = Convert.ToInt32(leitor["quantidade"])
                     };
                     listaPerfumes.Add(perfume);

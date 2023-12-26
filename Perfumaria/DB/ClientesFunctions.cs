@@ -116,6 +116,7 @@ namespace Perfumaria.DB
                     $"name ='{cliente.nome}', sobrenome = '{cliente.sobrenome}', email='{cliente.email}', cpf='{cliente.cpf}', endereco='{cliente.endereco}'" +
                     $"where id = {id}";
                 MySqlCommand command = new MySqlCommand(query, conn);
+                command.ExecuteNonQuery();
 
                 var query2 = $"select * from Clientes where id={id}";
                 MySqlCommand command2 = new MySqlCommand(query2, conn);

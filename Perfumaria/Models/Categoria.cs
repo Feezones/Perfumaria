@@ -5,12 +5,12 @@
         public enum idCategorias
         {
             Azul = 0,
-            vermelho= 1,
-            amarelo = 2,
-            roxo = 3,
-            branco = 4,
-            verde = 5,
-            preto = 6,
+            Vermelho = 1,
+            Amarelo = 2,
+            Roxo = 3,
+            Branco = 4,
+            Verde = 5,
+            Preto = 6
         }
     }
 }
