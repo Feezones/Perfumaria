@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Perfumaria.DB;
 using Perfumaria.Models;
 
@@ -49,6 +50,7 @@ namespace Perfumaria.Controllers
 
         // POST api/<ClientesController>
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult Post(Clientes clientes)
         {
             try
